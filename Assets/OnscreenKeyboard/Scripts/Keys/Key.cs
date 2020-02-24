@@ -19,24 +19,24 @@ namespace OnScreenKeyboard {
 			HandleClick();
 		}
 		
-		public bool IsTop { get; set; }
+		public Key Top { get; set; }
         public override Selectable FindSelectableOnUp() {
-            return IsTop ? this : base.FindSelectableOnUp();
+            return Top;
         }
 
-		public bool IsBottom { get; set; }
+		public Key Bottom { get; set; }
         public override Selectable FindSelectableOnDown() {
-            return IsBottom ? this : base.FindSelectableOnDown();
+            return Bottom;
         }
 
-		public bool IsLeft { get; set; }
+		public Key Left { get; set; }
         public override Selectable FindSelectableOnLeft() {
-            return IsLeft ? this : base.FindSelectableOnLeft();
+            return Left;
         }
 
-		public bool IsRight { get; set; }
+		public Key Right { get; set; }
         public override Selectable FindSelectableOnRight() {
-            return IsRight ? this : base.FindSelectableOnRight();
+            return Right;
         }
 
     }

@@ -1,4 +1,5 @@
- using System;
+using System;
+using System.Collections.Generic;
 
 namespace OnScreenKeyboard {
     
@@ -37,6 +38,6 @@ namespace OnScreenKeyboard {
 
     public interface IKeyboardLayout {
         KeyboardRow[] Rows();
-
+        Dictionary<string, (string, string, string, string)> Navigation();
     }
 }

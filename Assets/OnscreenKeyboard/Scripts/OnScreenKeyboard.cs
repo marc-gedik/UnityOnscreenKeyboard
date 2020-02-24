@@ -77,7 +77,7 @@ namespace OnScreenKeyboard {
 
 			// Hide everything before setting up the keys
 			keyboardWrapper.SetActive(false);
-
+			var keyDict = new Dictionary<string, Key>();
 			KeyboardRow[] rows = layout.Rows();
 			for (int i = 0; i < rows.Length; i++) {
 				KeyboardKey[] keys = rows[i].Keys;
@@ -90,15 +90,20 @@ namespace OnScreenKeyboard {
 						(keys[j] is BackSpaceKeyboardKey o3) ? SetupKey(o3, row) :
 						(keys[j] is SpaceKeyboardKey o4) ? SetupKey(o4, row) :
 						(keys[j] is EnterKeyboardKey o5) ? SetupKey(o5, row) : (null, null);
-					key.IsTop = i == 0;
-					key.IsBottom = i == rows.Length - 1;
-					key.IsLeft = j == 0;
-					key.IsRight = j == keys.Length - 1;
+					keyDict.Add(obj.name, key);
 					obj.SetActive (true);
 					if(i == 0 && j == 0)
 						firstKey = obj;	
 				}
 				row.SetActive(true);
+			}
+			foreach( var kvp in layout.Navigation() ) {
+    			var button = keyDict[kvp.Key];
+				(string top, string bottom, string left, string right) = kvp.Value;
+				if(top != null) button.Top = keyDict[top];
+				if(bottom != null) button.Bottom = keyDict[bottom];
+				if(left != null) button.Left = keyDict[left];
+				if(right != null) button.Right = keyDict[right];
 			}
 
 			// Reset visibility of canvas and keyboard
@@ -109,7 +114,7 @@ namespace OnScreenKeyboard {
 		private (Key, GameObject) SetupKey(EnterKeyboardKey o, GameObject row) {
 			GameObject obj = (GameObject) Instantiate(enterKeyPrefab, row.transform);
 			EnterKey key = obj.GetComponent<EnterKey> ();
-			obj.name = "Key: Enter";
+			obj.name = "Enter";
 			return (key, obj);
 		}
 
@@ -118,7 +123,7 @@ namespace OnScreenKeyboard {
 
 			SpaceKey key = obj.GetComponent<SpaceKey> ();
 
-			obj.name = "Key: Space";
+			obj.name = "Space";
 
 			return (key, obj);
 		}
@@ -128,7 +133,7 @@ namespace OnScreenKeyboard {
 
 			ShiftKey key = obj.GetComponent<ShiftKey> ();
 
-			obj.name = "Key: Shift";
+			obj.name = "Shift";
 
 			return (key, obj);
 		}
@@ -136,7 +141,7 @@ namespace OnScreenKeyboard {
 			GameObject obj = (GameObject) Instantiate(backSpaceKeyPrefab, row.transform);
 
 			Key key = obj.GetComponent<BackSpaceKey> ();
-			obj.name = "Key: BackSpace";
+			obj.name = "BackSpace";
 
 			return (key, obj);
 
@@ -147,7 +152,7 @@ namespace OnScreenKeyboard {
 			LetterKey key = obj.GetComponent<LetterKey> ();
 			key.key = o;
 			key.shifted = false;
-			obj.name = "Key: " + o.Character;
+			obj.name = o.Character;
 			shiftEvent.AddListener(key.Shift);
 
 			return (key, obj);
